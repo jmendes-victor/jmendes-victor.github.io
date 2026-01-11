@@ -4,10 +4,8 @@ export default function ProjectCard({ title, category, year }) {
   return (
     <div className="flex flex-col gap-4 cursor-pointer group w-full">
       <div className="relative w-full overflow-hidden bg-white/5 aspect-[4/3] rounded-sm">
-        {/* Placeholder for image */}
         <div className="absolute inset-0 bg-neutral-800 transition-transform duration-700 group-hover:scale-105" />
         
-        {/* Overlay effect */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
       </div>
       

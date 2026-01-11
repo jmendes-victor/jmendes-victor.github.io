@@ -1,5 +1,4 @@
-// components/AnimatedSubtitle.jsx
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import React from "react";
 
 export default function AnimatedSubtitle({ text, delayChildren = .7 }) {

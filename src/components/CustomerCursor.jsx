@@ -1,13 +1,10 @@
-// components/CustomCursor.jsx
-import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion"; // eslint-disable-line no-unused-vars
 
 export default function CustomCursor() {
-  // Valores reativos para X e Y do cursor
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Use spring para suavizar o movimento
   const springX = useSpring(cursorX, { stiffness: 300, damping: 30 });
   const springY = useSpring(cursorY, { stiffness: 300, damping: 30 });
 
@@ -37,11 +34,6 @@ export default function CustomCursor() {
         translateX: "-50%",
         translateY: "-50%",
         backdropFilter: "blur(2px)"
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
       }}
     />
   );

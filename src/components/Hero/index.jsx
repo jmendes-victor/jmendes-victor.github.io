@@ -1,4 +1,3 @@
-// Hero.jsx
 import AnimatedName from "./Components/AnimatedName";
 import AnimatedSubtitle from "./Components/AnimatedSubtitle";
 import AnimatedSubtitleEnd from "./Components/AnimatedSubtitleEnd";

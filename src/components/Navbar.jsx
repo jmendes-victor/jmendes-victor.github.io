@@ -7,8 +7,6 @@ export default function Navbar() {
 
   useEffect(() => {
     const updateThreshold = () => {
-      // Transition triggers when the "Projects" section (marginTop: 88vh) reaches the navbar
-      // We align it closely to 88vh so it doesn't trigger prematurely over the white background
       setThreshold(window.innerHeight * 0.88);
     };
     updateThreshold();
@@ -16,24 +14,12 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", updateThreshold);
   }, []);
 
-  // -- INTERPOLATIONS --
-  // Faster transition range to avoid "gray" mid-state
   const transitionRange = [threshold, threshold + 50];
 
-  // Text Color: Dark Grey -> White
   const textColor = useTransform(scrollY, transitionRange, ["rgba(0,0,0,0.8)", "#ffffff"]);
-  
-  // Background: Transparent -> Transparent (Let the section background show through)
-  // This fixes the "gray box" issue by preventing a semi-transparent overlay
   const backgroundColor = useTransform(scrollY, transitionRange, ["rgba(255,255,255,0)", "rgba(15,15,15,0)"]);
-  
-  // Blur: None -> 10px (Subtle glass effect if needed, keeps definition)
   const backdropBlur = useTransform(scrollY, transitionRange, ["blur(0px)", "blur(10px)"]);
-  
-  // Border: Transparent -> Very subtle separator
   const borderColor = useTransform(scrollY, transitionRange, ["rgba(255,255,255,0)", "rgba(255,255,255,0.02)"]);
-  
-  // Logo Inversion: 0 (Black) -> 1 (White)
   const logoFilter = useTransform(scrollY, transitionRange, ["invert(0)", "invert(1)"]);
 
   return (
