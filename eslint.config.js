@@ -23,7 +23,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // `motion` só aparece como <motion.div> — o core do ESLint não conta
+      // membro de JSX como uso, e daria falso positivo em todo arquivo animado.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^([A-Z_]|motion$)' }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

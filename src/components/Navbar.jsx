@@ -1,76 +1,81 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { useRef, useState } from "react";
+import { motion, useScroll, useMotionValueEvent, useReducedMotion } from "motion/react";
+import { scrollTo } from "../hooks/useLenis";
 
+/** Só reage a movimentos maiores que isto, senão treme com scroll fino. */
+const THRESHOLD = 6;
+/** Acima disto a navbar fica sempre visível (topo da página / hero). */
+const TOP_ZONE = 140;
+
+/**
+ * Design original: links à esquerda, logo centralizado, links à direita.
+ *
+ * Duas coisas resolvem a legibilidade, e elas se complementam:
+ *
+ * 1. `mix-blend-mode: difference` — o conteúdo da navbar é sempre branco e o
+ *    blend inverte o que estiver por baixo: sobre branco lê preto, sobre preto
+ *    lê branco, e sobre um título preto no meio de fundo branco cada pedaço da
+ *    letra se inverte sozinho. Nunca existe navbar da mesma cor do que passa
+ *    atrás. (Por isso o logo é a variante branca: `difference` com preto
+ *    devolve o próprio fundo — ele sumiria.)
+ *
+ * 2. Ela sai de cena ao descer e volta ao subir. Contraste garantido é uma
+ *    coisa; não disputar espaço com o texto que a pessoa está lendo é outra.
+ */
 export default function Navbar() {
   const { scrollY } = useScroll();
-  const [threshold, setThreshold] = useState(0);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const updateThreshold = () => {
-      setThreshold(window.innerHeight * 0.88);
-    };
-    updateThreshold();
-    window.addEventListener("resize", updateThreshold);
-    return () => window.removeEventListener("resize", updateThreshold);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const delta = y - lastY.current;
+    if (Math.abs(delta) < THRESHOLD) return;
+    lastY.current = y;
 
-  const transitionRange = [threshold, threshold + 50];
+    if (y < TOP_ZONE) setHidden(false);
+    else setHidden(delta > 0);
+  });
 
-  const textColor = useTransform(scrollY, transitionRange, ["rgba(0,0,0,0.8)", "#ffffff"]);
-  const backgroundColor = useTransform(scrollY, transitionRange, ["rgba(255,255,255,0)", "rgba(15,15,15,0)"]);
-  const backdropBlur = useTransform(scrollY, transitionRange, ["blur(0px)", "blur(10px)"]);
-  const borderColor = useTransform(scrollY, transitionRange, ["rgba(255,255,255,0)", "rgba(255,255,255,0.02)"]);
-  const logoFilter = useTransform(scrollY, transitionRange, ["invert(0)", "invert(1)"]);
+  const handleClick = (event, href) => {
+    event.preventDefault();
+    setHidden(false);
+    scrollTo(href);
+    history.replaceState(null, "", href);
+  };
+
+  const linkClass = "transition-opacity duration-300 hover:opacity-60";
 
   return (
     <motion.nav
-      className="fixed z-50 top-0 left-0 w-full"
-      style={{
-        padding: "20px 0",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "'Inter', sans-serif",
-        backgroundColor,
-        backdropFilter: backdropBlur,
-        WebkitBackdropFilter: backdropBlur,
-        borderBottom: "1px solid",
-        borderColor,
-      }}
+      aria-label="Principal"
+      className="fixed left-0 top-0 z-50 w-full mix-blend-difference"
+      style={{ padding: "20px 0" }}
+      animate={{ y: hidden && !reduced ? "-110%" : "0%" }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="container mx-auto flex justify-between items-center px-8">
-        <motion.div
-          className="flex gap-8 text-sm font-medium uppercase tracking-wide"
-          style={{ color: textColor }}
-        >
-          <a href="#work" className="hover:opacity-80 transition">
+      <div className="container mx-auto flex items-center justify-between px-8 text-white">
+        <div className="type-label flex gap-8">
+          <a href="#projetos" onClick={(e) => handleClick(e, "#projetos")} className={linkClass}>
             Projetos
           </a>
-          <a href="#about" className="hover:opacity-80 transition">
+          <a href="#sobre" onClick={(e) => handleClick(e, "#sobre")} className={linkClass}>
             Sobre
           </a>
-        </motion.div>
-
-        <div className="select-none" style={{ pointerEvents: "none" }}>
-          <motion.img
-            src="/img/logo/felinus.svg"
-            alt=""
-            width={42}
-            style={{ filter: logoFilter }}
-          />
         </div>
 
-        <motion.div
-          className="flex gap-8 text-sm font-medium uppercase tracking-wide"
-          style={{ color: textColor }}
-        >
-          <a href="#portfolio" className="hover:opacity-80 transition">
-            Portfólio
+        <div className="select-none" style={{ pointerEvents: "none" }}>
+          <img src="/img/logo/felinus-white.svg" alt="" width={42} />
+        </div>
+
+        <div className="type-label flex gap-8">
+          <a href="#stack" onClick={(e) => handleClick(e, "#stack")} className={linkClass}>
+            Stack
           </a>
-          <a href="#contact" className="hover:opacity-80 transition">
+          <a href="#contato" onClick={(e) => handleClick(e, "#contato")} className={linkClass}>
             Contato
           </a>
-        </motion.div>
+        </div>
       </div>
     </motion.nav>
   );
