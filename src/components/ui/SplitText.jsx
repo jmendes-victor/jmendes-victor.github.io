@@ -69,7 +69,16 @@ export default function SplitText({
             // leading 1.15 e não 1: a caixa precisa caber o glifo inteiro
             // (acento do "Ã" em cima, perna do "j" embaixo) ou a máscara corta.
             // É também o que faz o translateY(100%) esconder a letra por inteiro.
-            <span key={c} className="inline-block overflow-hidden leading-[1.15]">
+            //
+            // O px/-mx alarga só a área de corte, sem mexer no layout: a máscara
+            // tem a largura do avanço da letra, mas o letter-spacing negativo
+            // dos títulos (até -0.045em) encolhe esse avanço para dentro da
+            // tinta e o overflow-hidden come a direita do glifo — some um pedaço
+            // do "S" de MENDES. 0.08em cobre a pior sobra medida na Anton.
+            <span
+              key={c}
+              className="-mx-[0.08em] inline-block overflow-hidden px-[0.08em] leading-[1.15]"
+            >
               <motion.span
                 variants={letter}
                 className="inline-block leading-[1.15] will-change-transform"

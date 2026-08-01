@@ -7,6 +7,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import { scrollTo } from "../hooks/useLenis";
+import Logo from "./ui/Logo";
 
 // scroll menor que isto é ignorado, senão a navbar treme
 const THRESHOLD = 6;
@@ -31,7 +32,7 @@ const LINKS = [
 // Abaixo de md os quatro links não cabem ao lado do logo, então viram um menu
 // em tela cheia. O overlay fica fora da nav de propósito: dentro dela o
 // mix-blend-difference inverteria o painel inteiro.
-export default function Navbar() {
+export default function Navbar({ start = false }) {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -99,8 +100,10 @@ export default function Navbar() {
         <div className="container mx-auto flex items-center justify-between px-6 text-white md:px-8">
           <div className="type-label hidden gap-8 md:flex">{links(LINKS.slice(0, 2))}</div>
 
+          {/* o logo fica montado desde o início, só parado — assim a barra já
+              nasce com a altura final e não pula quando a marca aparece */}
           <div className="select-none" style={{ pointerEvents: "none" }}>
-            <img src="/img/logo/felinus-white.svg" alt="" width={42} />
+            <Logo size={46} reveal={start} />
           </div>
 
           <div className="type-label hidden gap-8 md:flex">{links(LINKS.slice(2))}</div>
@@ -128,7 +131,7 @@ export default function Navbar() {
           >
             {/* mesma altura e margem da navbar, para o logo não saltar ao abrir */}
             <div className="flex items-center justify-between" style={{ padding: "20px 0" }}>
-              <img src="/img/logo/felinus-white.svg" alt="" width={42} />
+              <Logo size={46} />
               <button
                 type="button"
                 onClick={() => setMenu(false)}

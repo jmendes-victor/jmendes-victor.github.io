@@ -30,7 +30,7 @@ export default function App() {
       <Preloader onDone={handleDone} />
       <Cursor />
       <Rails />
-      <Navbar />
+      <Navbar start={ready} />
       <Hero start={ready} />
       <main>
         <Intro />

@@ -27,9 +27,16 @@ export default function Hero({ start = true }) {
         className="flex w-fit max-w-full flex-col items-center"
         style={reduced ? undefined : { scale, opacity, y }}
       >
-        {/* a margem negativa compensa o leading 1.15 que o SplitText usa para
-            não cortar acento; sem ela sobra espaço demais até a legenda */}
-        <h1 className="type-mega -mb-[0.06em] text-[var(--fg)]">
+        {/* -mb compensa o leading 1.15 que o SplitText usa para não cortar
+            acento; sem ela sobra espaço demais até a legenda.
+
+            -ml/mr alinham a legenda pela TINTA do nome, não pela caixa de
+            texto: a Anton abre 0.035em antes do "M" e o letter-spacing
+            negativo fecha a caixa antes do fim do "S". Sem isso
+            "Desenvolvedor" nasce à esquerda do M e "Portfólio 2026" morre
+            antes do S. Os dois valores foram medidos nesta fonte para a
+            palavra "Mendes" — mudar o nome pede medir de novo. */}
+        <h1 className="type-mega -mb-[0.06em] -ml-[0.031em] mr-[0.022em] text-[var(--fg)]">
           {start && (
             <SplitText text={profile.name} delay={0.15} stagger={0.05} duration={1.3} />
           )}

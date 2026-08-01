@@ -4,7 +4,6 @@ export const profile = {
   name: "Mendes",
   role: "Desenvolvedor",
   edition: "Portfólio 2026",
-  // TODO: confirmar antes de publicar — o site usava wjoaow2@gmail.com
   email: "jonh_victor@outlook.com",
   location: "Pernambuco, Brasil",
   availability: "Disponível para projetos",
