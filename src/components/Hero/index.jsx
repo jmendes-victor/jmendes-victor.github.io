@@ -2,27 +2,17 @@ import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import SplitText from "../ui/SplitText";
 import { profile } from "../../data/site";
 
-/**
- * Mantido do design original: nome revelado letra a letra, com a função à
- * esquerda e a edição à direita alinhadas às bordas do nome.
- *
- * É `position: fixed` — não rola. O conteúdo passa por cima dele, e o espaço
- * de rolagem do hero é o `margin-top` da folha de conteúdo (<Sheet />).
- *
- * O que mudou: o nome agora é tipo de display (Anton) na escala de cartaz, e
- * o bloco inteiro recua enquanto a folha sobe. Antes ele ficava parado sendo
- * encoberto, o que lia como "sumiu atrás"; recuando, lê como profundidade.
- *
- * A margem negativa é menor aqui (0.06em, não 0.12em) porque Anton tem altura
- * de x maior que a Inter: com o valor antigo a legenda encostava no nome.
- *
- * `start` vem do preloader — sem ele o nome se escreveria atrás da cortina.
- */
+// Nome revelado letra a letra, com função e edição alinhadas às bordas dele.
+//
+// É position: fixed e não rola — o conteúdo passa por cima. Quem reserva o
+// espaço de rolagem do hero é o margin-top: 100vh da Intro.
+//
+// `start` vem do preloader; sem ele o nome se escreveria atrás da cortina.
 export default function Hero({ start = true }) {
   const reduced = useReducedMotion();
   const { scrollY } = useScroll();
 
-  // 0 → 100vh é exatamente o trecho em que a folha de conteúdo cobre o hero
+  // 0 → 100vh é o trecho em que o conteúdo cobre o hero
   const range = typeof window === "undefined" ? [0, 800] : [0, window.innerHeight];
   const scale = useTransform(scrollY, range, [1, 0.92]);
   const opacity = useTransform(scrollY, range, [1, 0]);
@@ -37,9 +27,8 @@ export default function Hero({ start = true }) {
         className="flex w-full max-w-full flex-col items-center sm:w-fit"
         style={reduced ? undefined : { scale, opacity, y }}
       >
-        {/* margem negativa em em: o SplitText usa leading 1.15 nas letras (para
-            não cortar acento), então sem isto a legenda ficaria mais longe do
-            nome do que estava no design original */}
+        {/* a margem negativa compensa o leading 1.15 que o SplitText usa para
+            não cortar acento; sem ela sobra espaço demais até a legenda */}
         <h1 className="type-mega -mb-[0.06em] text-[var(--fg)]">
           {start && (
             <SplitText text={profile.name} delay={0.15} stagger={0.05} duration={1.3} />

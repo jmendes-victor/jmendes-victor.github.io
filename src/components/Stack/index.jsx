@@ -5,7 +5,7 @@ import { stack } from "../../data/site";
 
 export default function Stack() {
   const total = stack.reduce((n, g) => n + g.items.length, 0);
-  // A faixa mostra tudo de uma vez; as linhas abaixo é que dizem o que é o quê.
+  // a faixa mostra tudo junto; o agrupamento aparece nas linhas abaixo
   const all = stack.flatMap((group) => group.items);
 
   return (
@@ -16,9 +16,7 @@ export default function Stack() {
         meta={`(${String(total).padStart(2, "0")})`}
       />
 
-      {/* full-bleed: a faixa sai do gutter e encosta nas duas bordas da tela.
-          Presa à coluna de texto ela pareceria um carrossel; sangrando, lê como
-          fita passando por trás da página. */}
+      {/* as margens negativas cancelam o gutter: a faixa vai de borda a borda */}
       <Marquee
         items={all}
         className="mt-16 -mx-6 border-y border-[var(--rule)] py-6 md:mt-24 md:-mx-10 xl:-mx-14"

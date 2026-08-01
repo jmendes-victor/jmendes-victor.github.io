@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
-/**
- * Anel que segue o mouse com atraso. `mix-blend-mode: difference` faz ele
- * inverter o que estiver embaixo, então funciona tanto no fundo branco quanto
- * no preto sem precisar trocar de cor.
- *
- * Só existe em ponteiro fino (mouse). Em touch nem é montado.
- */
+// Anel que segue o mouse. Só monta em ponteiro fino — em touch retorna null.
+// O mix-blend-difference dispensa trocar a cor entre as seções claras e escuras.
 export default function Cursor() {
   const [enabled, setEnabled] = useState(false);
   const [hovering, setHovering] = useState(false);

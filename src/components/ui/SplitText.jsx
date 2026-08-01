@@ -7,10 +7,8 @@ const segmenter =
     ? new Intl.Segmenter("pt", { granularity: "grapheme" })
     : null;
 
-/**
- * Quebra em grafemas, não em code points: senão o "ã" de "João" vira "a" + til
- * combinante em máscaras separadas — e o til aparece solto flutuando.
- */
+// Quebra em grafemas e não em code points: por code point, o "ã" de "João" vira
+// "a" + til em máscaras separadas e o til anima solto.
 function toGraphemes(word) {
   const normalized = word.normalize("NFC");
   return segmenter
@@ -18,14 +16,9 @@ function toGraphemes(word) {
     : [...normalized];
 }
 
-/**
- * Revela um texto letra por letra, cada uma subindo (ou descendo) por trás de
- * uma máscara. Substitui os antigos AnimatedName / AnimatedSubtitle /
- * AnimatedSubtitleEnd, que eram o mesmo componente três vezes.
- *
- * O texto é quebrado em palavras antes de virar letras, então a quebra de linha
- * acontece entre palavras — nunca no meio de uma.
- */
+// Revela o texto letra por letra, cada uma subindo (ou descendo) por trás de uma
+// máscara. A quebra em palavras vem antes da quebra em letras, o que mantém a
+// quebra de linha entre palavras.
 export default function SplitText({
   text,
   className = "",
@@ -55,7 +48,7 @@ export default function SplitText({
 
   const words = text.split(" ");
 
-  // No hero dispara na montagem; numa lista longa, só quando a linha entra na tela.
+  // no hero anima na montagem; em listas longas, só quando a linha entra na tela
   const trigger = inView
     ? { whileInView: "visible", viewport: { once: true, margin: "0px 0px -15% 0px" } }
     : { animate: "visible" };
@@ -73,10 +66,9 @@ export default function SplitText({
       {words.map((word, w) => (
         <span key={w} aria-hidden="true" className="inline-flex whitespace-nowrap">
           {toGraphemes(word).map((char, c) => (
-            // leading 1.15 (e não 1) porque a caixa da letra precisa caber o
-            // glifo inteiro — acento de "Ã" em cima, perna de "j" embaixo —
-            // ou a máscara corta. É também o que garante que translateY(100%)
-            // esconda a letra por completo.
+            // leading 1.15 e não 1: a caixa precisa caber o glifo inteiro
+            // (acento do "Ã" em cima, perna do "j" embaixo) ou a máscara corta.
+            // É também o que faz o translateY(100%) esconder a letra por inteiro.
             <span key={c} className="inline-block overflow-hidden leading-[1.15]">
               <motion.span
                 variants={letter}

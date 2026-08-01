@@ -1,9 +1,8 @@
-/**
- * Texto que "rola" no hover: a cópia de cima sobe e sai, a de baixo entra.
- * É o mesmo efeito dos links do template Jack — feito só com CSS, sem JS.
- *
- * Espera um ancestral com a classe `group` (ou passe `self` para virar o group).
- */
+// Texto que rola no hover: a cópia de cima sai por cima, a de baixo entra.
+// Só CSS.
+//
+// Precisa de um ancestral com a classe `group` — ou passe `self` para o próprio
+// componente virar o group.
 export default function RollText({ children, className = "", self = false }) {
   return (
     <span

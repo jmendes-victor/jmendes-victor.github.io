@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 
-/** Entrada padrão das seções: sobe um pouco e aparece, uma única vez. */
+// Entrada padrão dos blocos: sobe um pouco e aparece, uma vez só.
 export default function Reveal({ children, delay = 0, className = "", y = 24 }) {
   const reduced = useReducedMotion();
 

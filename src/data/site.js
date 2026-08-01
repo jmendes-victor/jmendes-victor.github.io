@@ -1,20 +1,17 @@
-// Conteúdo do site em um só lugar. Editar aqui, não nos componentes.
+// Todo o conteúdo do site. Editar aqui, não nos componentes.
 
 export const profile = {
   name: "Mendes",
   role: "Desenvolvedor",
   edition: "Portfólio 2026",
-  // Do currículo. O site tinha wjoaow2@gmail.com — confirmar qual dos dois é o
-  // contato profissional antes de publicar.
+  // TODO: confirmar antes de publicar — o site usava wjoaow2@gmail.com
   email: "jonh_victor@outlook.com",
   location: "Pernambuco, Brasil",
   availability: "Disponível para projetos",
 };
 
-// Ordem de leitura da página. Alimenta os trilhos de margem (rótulo rotacionado
-// + contador). O hero fica de fora de propósito: ele é `position: fixed`, não
-// participa do fluxo, e contá-lo faria o contador nascer em 01 de 06 e nunca
-// sair de lá enquanto a folha não subisse.
+// Alimenta os trilhos de margem (rótulo + contador). O hero não entra: ele é
+// position: fixed, está fora do fluxo, e o contador não conseguiria sair dele.
 export const sections = [
   { id: "intro", label: "Abertura" },
   { id: "projetos", label: "Projetos" },
@@ -23,25 +20,18 @@ export const sections = [
   { id: "contato", label: "Contato" },
 ];
 
-// Fica entre fios no topo da folha de conteúdo, estilo ficha técnica.
+// Ficha técnica no topo da abertura.
 export const facts = [
   { label: "Base", value: "Pernambuco" },
   { label: "Foco", value: "Sistemas web & IA" },
   { label: "Formação", value: "Mestrando — UPE" },
 ];
 
-// Os quatro primeiros vêm do currículo — sistemas em produção, com cliente
-// real. Os dois últimos são o lado de pesquisa: um publicado, outro no GitHub.
+// href é null nos sistemas internos de cliente, que não têm link público.
 //
-// TODO(joão): a `stack` dos sistemas de gestão está incompleta — o currículo
-// cita JavaScript, TypeScript e PHP no período da Tábula, mas não diz o que foi
-// usado em qual. Ajustar quando chegar a pasta `freelancer`.
-//
-// TODO(joão): `image` está null em todos. É o maior buraco da página: o índice
-// é o coração do portfólio e hoje é só tipografia. Um print por projeto já
-// resolve — o <HoverPreview /> já sabe exibir.
-//
-// `href` fica null onde o sistema é interno de cliente e não tem link público.
+// TODO: revisar a stack dos sistemas de gestão quando chegar a pasta freelancer
+// (o currículo cita JS, TS e PHP na Tábula, mas não diz o que foi usado em cada).
+// TODO: image está null em todos — falta um print por projeto.
 export const projects = [
   {
     slug: "erp-textil",
@@ -117,13 +107,8 @@ export const projects = [
   },
 ];
 
-// Reescrito a partir do resumo do currículo: sistema de gestão em produção de
-// um lado, pesquisa aplicada de outro. A versão anterior vendia só front-end e
-// deixava metade do trabalho de fora.
+// [0] abre a página (Intro), [1] é o texto da seção Sobre.
 export const statement = [
-  // Concreto de propósito: os três verbos do meio são o que os sistemas de
-  // gestão da lista fazem de fato. A versão anterior falava em "estrutura" e
-  // "consequência" — soava bem e não dizia nada.
   "Sistema bom não chama atenção. O pedido sai, o custo fecha, o lote se rastreia — e ninguém precisa saber o que acontece por baixo.",
   "Trabalho nas duas pontas — sistemas de gestão que rodam em produção, com rastreabilidade e custo calculado a cada etapa, e pesquisa aplicada em aprendizado de máquina. O que liga as duas é a mesma teimosia: entender o problema até o fim antes de escrever a primeira linha.",
 ];
@@ -159,8 +144,7 @@ export const stack = [
 ];
 
 export const socials = [
-  // era /PK-John, que é o nome de usuário do git local e não existe no GitHub
-  // (404). O remote do repositório aponta para jmendes-victor.
+  // usuário correto é jmendes-victor (o do remote); PK-John é só o git local e dá 404
   { label: "GitHub", href: "https://github.com/jmendes-victor" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/jmendesvictor" },
 ];

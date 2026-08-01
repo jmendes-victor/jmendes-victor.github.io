@@ -2,26 +2,16 @@ import { useRef, useState } from "react";
 import { motion, useScroll, useMotionValueEvent, useReducedMotion } from "motion/react";
 import { scrollTo } from "../hooks/useLenis";
 
-/** Só reage a movimentos maiores que isto, senão treme com scroll fino. */
+// scroll menor que isto é ignorado, senão a navbar treme
 const THRESHOLD = 6;
-/** Acima disto a navbar fica sempre visível (topo da página / hero). */
+// dentro do hero ela fica sempre visível
 const TOP_ZONE = 140;
 
-/**
- * Design original: links à esquerda, logo centralizado, links à direita.
- *
- * Duas coisas resolvem a legibilidade, e elas se complementam:
- *
- * 1. `mix-blend-mode: difference` — o conteúdo da navbar é sempre branco e o
- *    blend inverte o que estiver por baixo: sobre branco lê preto, sobre preto
- *    lê branco, e sobre um título preto no meio de fundo branco cada pedaço da
- *    letra se inverte sozinho. Nunca existe navbar da mesma cor do que passa
- *    atrás. (Por isso o logo é a variante branca: `difference` com preto
- *    devolve o próprio fundo — ele sumiria.)
- *
- * 2. Ela sai de cena ao descer e volta ao subir. Contraste garantido é uma
- *    coisa; não disputar espaço com o texto que a pessoa está lendo é outra.
- */
+// Esconde ao descer, volta ao subir.
+//
+// O conteúdo é sempre branco + mix-blend-difference, o que garante contraste
+// sobre qualquer fundo sem precisar saber em que seção estamos. O logo tem que
+// ser a variante branca: em difference, o preto devolveria o fundo e sumiria.
 export default function Navbar() {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);

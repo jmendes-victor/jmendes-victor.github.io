@@ -3,36 +3,18 @@ import SplitText from "../ui/SplitText";
 
 const EASE = [0.16, 1, 0.3, 1];
 
-/**
- * Uma linha do índice. Nada de card — mas duas linhas, não uma: em cima
- * número/título/disciplina/ano, embaixo resumo e stack. É a densidade que
- * separa um índice de uma lista de links.
- *
- * O hover inverte a linha: uma faixa da cor do texto varre por baixo e o
- * conteúdo passa a ler na cor do fundo. Três decisões dentro disso:
- *
- * 1. A varredura *atravessa*: entra pela esquerda e sai pela direita, em vez
- *    de voltar por onde veio. Um preenchimento que recua desfaz o gesto; um
- *    que continua no mesmo sentido lê como algo passando por baixo da linha.
- *    O truque é que `transform-origin` não é transicionado — ele troca na
- *    hora. Em repouso a origem é a direita, no hover é a esquerda: entrando,
- *    a faixa cresce a partir da esquerda; saindo, a origem já saltou para a
- *    direita e ela encolhe para lá.
- *
- * 2. O texto não troca de cor: ele usa `mix-blend-difference` e se inverte
- *    sozinho onde a faixa passou por baixo. Trocar a cor no hover não funciona
- *    aqui — a cor muda na linha inteira de uma vez, enquanto a faixa a cobre
- *    progressivamente, então o pedaço ainda não coberto escurece sobre o fundo
- *    escuro e some por um instante. O blend não tem esse problema porque é
- *    resolvido pixel a pixel: a inversão acompanha exatamente a borda da
- *    faixa, e nenhuma duração precisa bater com nenhuma outra.
- *
- * 3. Nada muda de altura. Linha que cresce empurra as de baixo, o cursor cai
- *    fora dela e o estado pisca.
- *
- * `dimmed` é o que dá foco: sem apagar as outras, a inversão sozinha não
- * separa a linha apontada do resto da lista.
- */
+// Uma linha do índice de projetos. No hover, uma faixa varre por baixo do
+// conteúdo e a linha inteira inverte. Dois detalhes que parecem enfeite mas não são:
+//
+// - o transform-origin não entra na transition, ele troca na hora: origem à
+//   direita em repouso e à esquerda no hover faz a faixa entrar por um lado e
+//   sair pelo outro, em vez de voltar por onde veio.
+// - o texto inverte via mix-blend-difference em vez de trocar de cor no hover.
+//   Trocar a cor pinta a linha toda de uma vez, enquanto a faixa a cobre aos
+//   poucos, e o trecho descoberto some contra o fundo. O blend resolve pixel a
+//   pixel e acompanha a borda da faixa sozinho.
+//
+// Nada aqui pode mudar de altura, senão a lista empurra e o hover pisca.
 export default function ProjectRow({ project, index, dimmed, onEnter }) {
   const reduced = useReducedMotion();
 
@@ -46,14 +28,12 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
 
   return (
     <li
-      // `isolate` cria o contexto de empilhamento: sem ele o -z-10 da faixa
-      // furaria a linha e iria parar atrás do fundo da própria seção.
+      // isolate cria o contexto de empilhamento; sem ele o -z-10 da faixa a
+      // manda para trás do fundo da seção e ela some
       className="group relative isolate"
       onPointerEnter={onEnter}
     >
-      {/* A faixa que varre por baixo de tudo. O inset negativo a faz sangrar
-          para fora do gutter e encostar nas bordas da tela — presa à coluna de
-          texto ela pareceria um botão, sangrando lê como faixa. */}
+      {/* faixa do hover; o inset negativo a leva até as bordas da tela */}
       <span
         aria-hidden="true"
         className="absolute inset-x-[-1.5rem] inset-y-0 -z-10 origin-right scale-x-0 bg-[var(--fg)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:origin-left group-hover:scale-x-100 motion-reduce:transition-none md:inset-x-[-2.5rem]"
@@ -91,7 +71,7 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
           </span>
         </div>
 
-        {/* pl casa com a coluna do número (w-8+gap-4 / w-12+gap-8) */}
+        {/* o pl alinha com a coluna do número (w-8+gap-4 / w-12+gap-8) */}
         <motion.div
           className="mt-3 flex flex-col gap-1 pl-12 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pl-20"
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
@@ -99,7 +79,7 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
           viewport={{ once: true, margin: "0px 0px -15% 0px" }}
           transition={{ duration: 0.8, ease: EASE, delay: delay + 0.25 }}
         >
-          {/* caixa normal: é frase, não rótulo — em caixa alta vira ruído */}
+          {/* caixa normal aqui: é frase, não rótulo */}
           <p className="type-mono max-w-xl normal-case tracking-normal text-[var(--fg-mute)]">
             {project.summary}
           </p>
@@ -115,7 +95,7 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
         </motion.div>
       </Row>
 
-      {/* o fio se desenha da esquerda quando a linha entra na tela */}
+      {/* fio que separa as linhas, desenhado da esquerda ao entrar na tela */}
       <motion.span
         className="block h-px w-full origin-left bg-[var(--rule)]"
         initial={{ scaleX: reduced ? 1 : 0 }}

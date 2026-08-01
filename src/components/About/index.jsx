@@ -10,7 +10,6 @@ export default function About() {
     >
       <SectionHead label="Sobre" title="Abordagem" />
 
-      {/* Grid suíço: rótulo na coluna estreita, texto na larga. */}
       <div className="mt-16 grid gap-8 md:mt-24 md:grid-cols-12 md:gap-10">
         <span className="type-mono text-[var(--fg-mute)] md:col-span-3">Abordagem</span>
         <Reveal className="md:col-span-9 lg:col-span-7">
@@ -21,10 +20,7 @@ export default function About() {
       <div className="mt-20 grid gap-8 md:mt-28 md:grid-cols-12 md:gap-10">
         <span className="type-mono text-[var(--fg-mute)] md:col-span-3">Trajetória</span>
 
-        {/* Timeline: o período vira a âncora à esquerda e o cargo cresce para
-            caber ao lado dele — é a estrutura "ano / evento" da referência.
-            O fio de cima é o que separa as entradas; o "+" à direita não abre
-            nada, ele marca visualmente o fim da linha e ganha cor no hover. */}
+        {/* o "+" da direita é decorativo, não abre nada */}
         <ul className="md:col-span-9">
           {experience.map((item, i) => (
             <Reveal key={`${item.company}-${i}`} delay={i * 0.06}>

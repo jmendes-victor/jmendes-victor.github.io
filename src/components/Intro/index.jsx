@@ -1,19 +1,8 @@
 import ScrollReveal from "../ui/ScrollReveal";
 import { facts, statement, profile } from "../../data/site";
 
-/**
- * Primeira coisa depois do hero. Carrega o `margin-top: 100vh` que reserva a
- * rolagem do hero e o fio preto do topo — é ele que faz o conteúdo ler como
- * uma folha deslizando por cima, e não como mais uma seção.
- *
- * A seção existe para um parágrafo só, e por isso ele ocupa quase tudo. A
- * ficha técnica em cima é o contraponto pequeno: sem ela o manifesto flutuaria
- * sozinho no branco e perderia a referência de grade.
- *
- * O espaço vertical aqui é generoso de propósito. Este é o trecho em que a
- * folha acabou de cobrir o hero, e é onde a página tem que respirar antes de
- * começar a listar coisas.
- */
+// Primeira seção depois do hero. O margin-top: 100vh é o que reserva a rolagem
+// do hero (que é fixed) — mexer nele quebra a entrada da página.
 export default function Intro() {
   return (
     <section
@@ -35,9 +24,7 @@ export default function Intro() {
         </span>
 
         <div className="md:col-span-9">
-          {/* medida curta (~20ch) para o parágrafo virar um bloco alto e
-              estreito: em linha cheia, nesse corpo, o olho perde o começo da
-              linha seguinte */}
+          {/* ~20ch: nesse corpo de texto, linha cheia fica difícil de acompanhar */}
           <ScrollReveal
             text={statement[0]}
             className="type-manifesto max-w-[20ch] text-balance"
@@ -45,8 +32,7 @@ export default function Intro() {
         </div>
       </div>
 
-      {/* fio de fecho com o índice da seção — o mesmo par rótulo/número dos
-          trilhos, aqui deitado, para a abertura terminar em vez de só parar */}
+      {/* mesmo par rótulo/número dos trilhos, aqui deitado, fechando a seção */}
       <div className="mt-28 flex items-baseline justify-between border-t border-[var(--rule)] pt-4 md:mt-44">
         <span className="type-mono text-[var(--fg-mute)]">Abertura</span>
         <span className="type-mono text-[var(--fg-mute)]">01 — 05</span>

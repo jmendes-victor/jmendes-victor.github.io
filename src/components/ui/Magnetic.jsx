@@ -1,16 +1,9 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
 
-/**
- * O elemento se inclina na direção do cursor quando ele chega perto.
- *
- * Vale para um alvo por página, no máximo dois. O efeito funciona porque é
- * raro: se tudo for magnético, nada parece especial e a página fica escorregadia
- * — o usuário perde a noção de onde as coisas estão de fato.
- *
- * A mola importa mais que a distância: sem ela o elemento gruda no cursor e
- * parece preso; com ela, parece atraído.
- */
+// Puxa o elemento na direção do cursor. Usar em um ou dois alvos por página —
+// em excesso a interface fica escorregadia e o usuário perde a referência de
+// onde as coisas realmente estão.
 export default function Magnetic({ children, strength = 0.28, className = "" }) {
   const reduced = useReducedMotion();
   const ref = useRef(null);
@@ -23,7 +16,7 @@ export default function Magnetic({ children, strength = 0.28, className = "" }) 
   const handleMove = (event) => {
     const box = ref.current?.getBoundingClientRect();
     if (!box) return;
-    // deslocamento a partir do centro do próprio elemento
+    // distância do cursor até o centro do elemento
     x.set((event.clientX - (box.left + box.width / 2)) * strength);
     y.set((event.clientY - (box.top + box.height / 2)) * strength);
   };

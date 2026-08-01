@@ -8,9 +8,8 @@
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
-  /* Só para os momentos de tipo gigante. Inter continua sendo a voz do site —
-     Anton em texto corrido seria ilegível, ela não tem peso variável nem
-     minúsculas confortáveis. Display face + text face, como em impresso. */
+  /* Só para os títulos gigantes. Anton não tem peso variável e é pesada demais
+     em texto corrido — daí a Inter continuar como fonte padrão do site. */
   --font-display: "Anton", "Inter", ui-sans-serif, sans-serif;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -18,8 +17,7 @@
 
 @layer base {
   :root {
-    /* Recuo dos trilhos de margem. O gutter das seções é maior que isto de
-       propósito: o texto respira para dentro dos fios, nunca encosta neles. */
+    /* Recuo dos trilhos. Sempre menor que o .gutter, senão o texto encosta neles. */
     --rail-inset: 0.75rem;
   }
 
@@ -31,7 +29,7 @@
 
   html {
     -webkit-text-size-adjust: 100%;
-    /* offsetParent não-estático para o useScroll do Motion medir a partir dele */
+    /* offsetParent não-estático, exigido pelo useScroll do Motion */
     position: relative;
   }
 
@@ -57,15 +55,12 @@
 }
 
 @layer components {
-  /* Painel temático. Cada seção declara se é clara ou escura e os filhos leem
-     as variáveis — nenhum componente precisa saber sobre que fundo está.
-     Sem isto, alternar cor obrigaria a duplicar cada classe de cor em toda
-     linha de projeto, rótulo e fio do site.
+  /* Cada seção declara .panel-light ou .panel-dark e os filhos só leem as
+     variáveis, sem saber sobre que fundo estão.
 
-     Os níveis de opacidade não são simétricos entre os dois temas de propósito:
-     texto claro sobre fundo escuro parece mais apagado que o inverso na mesma
-     porcentagem, então o tema escuro precisa de mais opacidade para o mesmo
-     peso visual. */
+     As opacidades não são iguais entre os dois temas: texto claro sobre fundo
+     escuro parece mais apagado que o contrário na mesma porcentagem, então o
+     tema escuro precisa de valores mais altos para o mesmo peso. */
   .panel {
     background: var(--bg);
     color: var(--fg);
@@ -91,9 +86,8 @@
     --line: #ffffff;
   }
 
-  /* Nome do hero — tratamento tipográfico do design original: Inter 700,
-     tracking -0.04em, leading 0.9. O teto de 8.75rem é os 140px fixos que ele
-     tinha; o clamp só entra para baixo, em tela estreita. */
+  /* Contador do preloader. O teto de 8.75rem equivale aos 140px do design; o
+     clamp só age para baixo, em tela estreita. */
   .type-display {
     font-family: var(--font-sans);
     font-size: clamp(3rem, 9vw, 8.75rem);
@@ -103,7 +97,7 @@
     text-transform: uppercase;
   }
 
-  /* Linhas do índice de projetos: o maior elemento depois do hero. */
+  /* Títulos das linhas do índice de projetos. */
   .type-index {
     font-size: clamp(2rem, 5.6vw, 5rem);
     font-weight: 700;
@@ -121,10 +115,8 @@
     text-transform: uppercase;
   }
 
-  /* O manifesto da abertura. Caixa baixa e peso 500 no meio de uma página
-     inteira de caixa alta 700 — é o único lugar onde alguém fala em vez de
-     rotular, e a mudança de voz precisa ser visível antes de ser lida.
-     Leading 1.1: em texto desse corpo, 1.4 abriria buracos entre as linhas. */
+  /* Parágrafo de abertura. Caixa baixa e peso 500, único no site, que é todo
+     caixa alta 700. Leading 1.1 porque nesse corpo o padrão abre buracos. */
   .type-manifesto {
     font-family: var(--font-sans);
     font-size: clamp(1.75rem, 4.4vw, 4rem);
@@ -141,9 +133,8 @@
     letter-spacing: -0.015em;
   }
 
-  /* Legenda do hero (função / edição) — métricas do design original:
-     Inter 700, 14px, tracking -0.02em. Só o hero usa isto; do fio preto para
-     baixo os metadados são monoespaçados. */
+  /* Legenda do hero (função / edição). Só o hero usa; do fio preto para baixo
+     os metadados são monoespaçados (.type-mono). */
   .type-hero-label {
     font-family: var(--font-sans);
     font-size: 0.875rem;
@@ -152,8 +143,8 @@
     text-transform: uppercase;
   }
 
-  /* Metadados: numeração, disciplina, ano, rótulos de seção.
-     Monoespaçada é o que dá o tom técnico e alinha as colunas sozinho. */
+  /* Metadados em geral: numeração, disciplina, ano, rótulos de seção.
+     Monoespaçada com tabular-nums, o que alinha as colunas sozinho. */
   .type-mono {
     font-family: var(--font-mono);
     font-size: clamp(0.68rem, 0.78vw, 0.8rem);
@@ -163,7 +154,7 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Navbar (Inter, como no design original) */
+  /* Links da navbar */
   .type-label {
     font-size: 0.875rem;
     font-weight: 500;
@@ -171,22 +162,20 @@
     text-transform: uppercase;
   }
 
-  /* O tipo que é cortado pela viewport. Não é o hero: é o título que entra
-     grande demais de propósito, como o "MOMENTS" / "EXPLORE" da referência.
-     92px de piso e 22vw de teto — em tela larga ele encosta nas duas margens. */
+  /* Nome do hero e títulos de seção. Em tela larga encosta nas duas margens e o
+     que sobra é cortado pelo overflow-hidden do container. */
   .type-mega {
     font-family: var(--font-display);
     font-size: clamp(5.75rem, 22vw, 20rem);
-    font-weight: 400; /* Anton só tem um peso; 700 faria o browser engordar falso */
+    font-weight: 400; /* Anton só tem um peso; 700 vira negrito sintético */
     line-height: 0.82;
-    /* -0.03em é o tracking medido na referência (-23px em 769px). Anton já
-       nasce condensada, então mais que isso começa a colar as hastes. */
+    /* Anton já nasce condensada: passar disso começa a colar as hastes */
     letter-spacing: -0.03em;
     text-transform: uppercase;
   }
 
-  /* Rótulo dos trilhos: menor e mais espaçado que o .type-mono do corpo,
-     porque vive rotacionado e precisa ler como chancela, não como texto. */
+  /* Rótulo dos trilhos: menor e mais espaçado que o .type-mono, porque fica
+     rotacionado. */
   .type-rail {
     font-family: var(--font-mono);
     font-size: 0.625rem;
@@ -196,10 +185,11 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Padding lateral único do site inteiro */
+  /* Margem lateral de todas as seções */
   .gutter {
     padding-inline: 1.5rem;
-    /* âncoras nativas também param abaixo da navbar fixa */
+    /* mesma folga do NAV_OFFSET, para as âncoras nativas não pararem embaixo
+       da navbar fixa */
     scroll-margin-top: 5.5rem;
   }
 

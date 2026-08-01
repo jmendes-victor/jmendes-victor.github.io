@@ -16,13 +16,11 @@ import Footer from "./components/Footer";
 export default function App() {
   useLenis();
 
-  // O hero só escreve o nome depois que a cortina sobe. Sem isso a animação
-  // de letra por letra acontece atrás dela e ninguém vê.
+  // o hero só começa a escrever o nome depois que a cortina sobe
   const [ready, setReady] = useState(false);
   const handleDone = useCallback(() => setReady(true), []);
 
   useEffect(() => {
-    // A animação de entrada do hero só faz sentido a partir do topo.
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
   }, []);
@@ -42,7 +40,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-      {/* por último e por cima de tudo, menos da cortina */}
       <Grain />
     </>
   );
