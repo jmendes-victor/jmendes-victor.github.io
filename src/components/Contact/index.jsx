@@ -27,7 +27,7 @@ export default function Contact() {
             data-cursor="link"
             className="group inline-block max-w-full"
           >
-            <span className="type-headline block break-all transition-colors duration-300 group-hover:text-accent">
+            <span className="type-headline type-email block break-all transition-colors duration-300 group-hover:text-accent">
               {profile.email}
             </span>
             {/* fio embaixo do e-mail, recolhe no hover */}

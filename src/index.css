@@ -125,6 +125,24 @@
     letter-spacing: -0.03em;
   }
 
+  /* Acompanha o .type-headline no e-mail do contato.
+     No .type-headline cheio o endereço pede 421px e só tem 327 num telefone,
+     então quebrava em "OUTLO / OK.COM" — corte no meio da palavra, no lugar
+     que o break-all escolheu. Encolher até caber em uma linha resolve os dois
+     problemas: some a quebra e o endereço para de competir com o "Vamos
+     conversar", que é quem deve ser a manchete da seção.
+
+     O fator 0.063 é a razão medida entre o corpo do texto e a largura que ele
+     ocupa, com folga. O -4rem desconta o gutter (2×1.5rem) e mais 1rem de
+     margem para a barra de rolagem: 100vw a inclui, mas ela não é área útil, e
+     sem esse desconto a conta erra por ~15px justo no limite e o endereço
+     volta a quebrar. O min() garante que isto nunca passe do .type-headline. */
+  @media (max-width: 500px) {
+    .type-email {
+      font-size: min(1.75rem, calc((100vw - 4rem) * 0.063));
+    }
+  }
+
   /* Parágrafo de destaque */
   .type-statement {
     font-size: clamp(1.05rem, 1.55vw, 1.5rem);

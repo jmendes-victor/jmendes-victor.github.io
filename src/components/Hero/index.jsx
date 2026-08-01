@@ -24,7 +24,7 @@ export default function Hero({ start = true }) {
       className="panel panel-light fixed inset-0 z-0 flex items-center justify-center overflow-hidden px-6"
     >
       <motion.div
-        className="flex w-full max-w-full flex-col items-center sm:w-fit"
+        className="flex w-fit max-w-full flex-col items-center"
         style={reduced ? undefined : { scale, opacity, y }}
       >
         {/* a margem negativa compensa o leading 1.15 que o SplitText usa para
