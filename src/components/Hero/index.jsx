@@ -33,7 +33,7 @@ export default function Hero({ start = true }) {
             -ml/mr alinham a legenda pela TINTA do nome, não pela caixa de
             texto: a Anton abre 0.035em antes do "M" e o letter-spacing
             negativo fecha a caixa antes do fim do "S". Sem isso
-            "Desenvolvedor" nasce à esquerda do M e "Portfólio 2026" morre
+            "Pesquisador" nasce à esquerda do M e "Portfólio 2026" morre
             antes do S. Os dois valores foram medidos nesta fonte para a
             palavra "Mendes" — mudar o nome pede medir de novo. */}
         <h1 className="type-mega -mb-[0.06em] -ml-[0.031em] mr-[0.022em] text-[var(--fg)]">

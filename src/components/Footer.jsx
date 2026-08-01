@@ -10,7 +10,7 @@ export default function Footer() {
     >
       <div className="flex flex-col gap-6 border-t border-[var(--rule)] pt-6 sm:flex-row sm:items-baseline sm:justify-between">
         <span className="type-mono text-[var(--fg-mute)]">
-          © {year} {profile.name} — {profile.location}
+          © {year} {profile.name} · {profile.location}
         </span>
 
         <ul className="flex flex-wrap gap-6">

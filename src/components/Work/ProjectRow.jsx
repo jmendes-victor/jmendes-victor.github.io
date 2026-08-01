@@ -85,7 +85,7 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
           </p>
 
           <span className="type-mono flex shrink-0 items-center gap-3 text-[var(--fg-mute)]">
-            {project.role} — {project.stack.join(" · ")}
+            {project.role} / {project.stack.join(" · ")}
             {project.href && (
               <span className="inline-block -translate-x-1 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100">
                 ↗

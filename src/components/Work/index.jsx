@@ -37,9 +37,9 @@ export default function Work() {
       className="panel panel-dark gutter relative z-10 pb-24 pt-24 md:pb-32 md:pt-32"
     >
       <SectionHead
-        label="Projetos selecionados"
+        label="Pesquisa e sistemas"
         title="Trabalho"
-        meta={`${firstYear}—${lastYear} · (${String(projects.length).padStart(2, "0")})`}
+        meta={`${firstYear}-${lastYear} · (${String(projects.length).padStart(2, "0")})`}
       />
 
       <ul className="mt-16 md:mt-24" onPointerLeave={() => setActive(null)}>
@@ -63,7 +63,7 @@ export default function Work() {
           className="group mt-10 flex items-baseline justify-between gap-6"
         >
           <span className="type-mono text-[var(--fg-mute)] transition-colors duration-300 group-hover:text-[var(--fg)]">
-            Todo o resto está nos repositórios
+            O que é público está nos repositórios
           </span>
           <span className="type-mono flex shrink-0 items-center gap-2 transition-colors duration-300 group-hover:text-accent">
             <RollText>GitHub</RollText>

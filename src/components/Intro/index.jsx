@@ -35,7 +35,7 @@ export default function Intro() {
       {/* mesmo par rótulo/número dos trilhos, aqui deitado, fechando a seção */}
       <div className="mt-28 flex items-baseline justify-between border-t border-[var(--rule)] pt-4 md:mt-44">
         <span className="type-mono text-[var(--fg-mute)]">Abertura</span>
-        <span className="type-mono text-[var(--fg-mute)]">01 — 05</span>
+        <span className="type-mono text-[var(--fg-mute)]">01 · 05</span>
       </div>
     </section>
   );
