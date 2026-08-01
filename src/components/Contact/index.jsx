@@ -15,7 +15,7 @@ export default function Contact() {
       </div>
 
       <div className="mt-8 overflow-hidden md:mt-10">
-        <h3 className="type-mega text-[var(--fg)]">
+        <h3 className="type-mega type-mega-fit text-[var(--fg)]">
           <SplitText text="Vamos conversar" inView justify="start" stagger={0.03} duration={1.1} />
         </h3>
       </div>

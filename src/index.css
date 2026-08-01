@@ -174,6 +174,19 @@
     text-transform: uppercase;
   }
 
+  /* Acompanha o .type-mega nos títulos de seção. Abaixo de md a margem lateral
+     come proporcionalmente mais tela que no desktop, e a 22vw uma palavra longa
+     ("Ferramenta", "conversar") perdia as últimas letras dentro do
+     overflow-hidden — o que lê como defeito, não como corte proposital. 20vw
+     devolve a sangria para os mesmos ~8% do desktop.
+
+     Não vale para o nome do hero, que é curto e já cabe inteiro. */
+  @media (max-width: 767px) {
+    .type-mega-fit {
+      font-size: clamp(2.5rem, 20vw, 9.5rem);
+    }
+  }
+
   /* Rótulo dos trilhos: menor e mais espaçado que o .type-mono, porque fica
      rotacionado. */
   .type-rail {

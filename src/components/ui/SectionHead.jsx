@@ -26,7 +26,10 @@ export default function SectionHead({ label, title, meta }) {
 
       {/* o título é maior que a coluna e o overflow-hidden corta o que sobra */}
       <div className="mt-8 overflow-hidden md:mt-10">
-        <motion.h3 className="type-mega text-[var(--fg)]" style={reduced ? undefined : { x }}>
+        <motion.h3
+          className="type-mega type-mega-fit text-[var(--fg)]"
+          style={reduced ? undefined : { x }}
+        >
           <SplitText text={title} inView justify="start" stagger={0.035} duration={1.1} />
         </motion.h3>
       </div>

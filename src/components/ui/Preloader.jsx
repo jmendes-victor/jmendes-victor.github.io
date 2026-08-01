@@ -23,16 +23,26 @@ export default function Preloader({ onDone }) {
       return;
     }
 
-    // trava o scroll enquanto a cortina está de pé. O Lenis precisa parar
+    // Trava o scroll enquanto a cortina está de pé. O Lenis precisa parar
     // junto: ele escuta o wheel e rola por conta própria, então overflow:
-    // hidden no body sozinho não segura.
+    // hidden no body sozinho não segura o desktop.
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    getLenis()?.stop();
+
+    // O release precisa acontecer aqui e não no cleanup: este componente nunca
+    // desmonta (quem sai é o motion.div dentro do AnimatePresence), então o
+    // cleanup só rodaria no unmount da página. Sem isto o overflow: hidden fica
+    // no body para sempre e o mobile, que depende do scroll nativo, não rola.
+    let lenis = null;
+    const release = () => {
+      document.body.style.overflow = previous;
+      lenis?.start();
+    };
 
     const finish = () => {
       setCount(100);
       setOpen(false);
+      release();
       // avisa aqui e não no onExitComplete: o hero tem que estar escrevendo o
       // nome enquanto a cortina sobe, senão sobra um segundo de tela vazia
       onDone();
@@ -40,6 +50,13 @@ export default function Preloader({ onDone }) {
 
     const start = performance.now();
     let frame = requestAnimationFrame(function tick(now) {
+      // o efeito do filho roda antes do pai, então na montagem o Lenis ainda
+      // não existe — o primeiro frame é o ponto mais cedo em que dá para parar
+      if (!lenis) {
+        lenis = getLenis();
+        lenis?.stop();
+      }
+
       const progress = Math.min((now - start) / DURATION, 1);
       // ease-out no fim; contador linear parece travado nos últimos números
       setCount(Math.round((1 - Math.pow(1 - progress, 3)) * 100));
@@ -56,8 +73,7 @@ export default function Preloader({ onDone }) {
     return () => {
       cancelAnimationFrame(frame);
       clearTimeout(failsafe);
-      document.body.style.overflow = previous;
-      getLenis()?.start();
+      release();
     };
   }, [reduced, onDone]);
 
