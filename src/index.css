@@ -60,7 +60,13 @@
 
      As opacidades não são iguais entre os dois temas: texto claro sobre fundo
      escuro parece mais apagado que o contrário na mesma porcentagem, então o
-     tema escuro precisa de valores mais altos para o mesmo peso. */
+     tema escuro precisa de valores mais altos para o mesmo peso.
+
+     Os pisos de --fg-soft e --fg-mute são de contraste, não de gosto: abaixo
+     de 0.56 o preto sobre branco cai dos 4.5:1 que a WCAG AA pede para texto
+     pequeno, e é neles que estão todos os metadados monoespaçados. O tema
+     escuro já passava e por isso não mudou. --fg-faint fica de fora da conta
+     porque só pinta o "+" decorativo da trajetória, que é SVG. */
   .panel {
     background: var(--bg);
     color: var(--fg);
@@ -69,8 +75,8 @@
   .panel-light {
     --bg: #ffffff;
     --fg: #0a0a0a;
-    --fg-soft: rgba(10, 10, 10, 0.55);
-    --fg-mute: rgba(10, 10, 10, 0.4);
+    --fg-soft: rgba(10, 10, 10, 0.68);
+    --fg-mute: rgba(10, 10, 10, 0.58);
     --fg-faint: rgba(10, 10, 10, 0.22);
     --rule: rgba(10, 10, 10, 0.16);
     --line: #0a0a0a;

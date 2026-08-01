@@ -58,11 +58,17 @@ export default function SplitText({
       variants={container}
       initial="hidden"
       {...trigger}
-      aria-label={text}
       className={`flex flex-wrap ${
         justify === "center" ? "justify-center" : "justify-start"
       } ${className}`}
     >
+      {/* O texto acessível vem daqui, não de um aria-label no span: span sem
+          role é "generic", e generic proíbe nome acessível — o leitor de tela
+          descartava o label e, como as letras são todas aria-hidden, o elemento
+          era anunciado como nada. sr-only é position: absolute, então não entra
+          no fluxo do flex. */}
+      <span className="sr-only">{text}</span>
+
       {words.map((word, w) => (
         <span key={w} aria-hidden="true" className="inline-flex whitespace-nowrap">
           {toGraphemes(word).map((char, c) => (

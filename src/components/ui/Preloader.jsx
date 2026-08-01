@@ -88,7 +88,7 @@ export default function Preloader({ onDone }) {
         >
           {/* gutter para o contador nascer na mesma margem do resto do site */}
           <div className="gutter flex items-end justify-between pb-8">
-            <span className="type-mono text-paper/40">Carregando</span>
+            <span className="type-mono text-paper/55">Carregando</span>
             <span className="type-display leading-none text-paper">
               {String(count).padStart(3, "0")}
             </span>
