@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useLenis from "./hooks/useLenis";
+import usePanelBackdrop from "./hooks/usePanelBackdrop";
 import Cursor from "./components/Cursor";
 import Preloader from "./components/ui/Preloader";
 import Grain from "./components/ui/Grain";
@@ -15,6 +16,7 @@ import Footer from "./components/Footer";
 
 export default function App() {
   useLenis();
+  usePanelBackdrop();
 
   // o hero só começa a escrever o nome depois que a cortina sobe
   const [ready, setReady] = useState(false);

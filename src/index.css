@@ -27,6 +27,19 @@
     }
   }
 
+  :root {
+    /* Não é o --color-accent. A barra é fixa na viewport e as seções passam por
+       baixo dela alternando branco e ink, então a cor tem que servir aos dois
+       fundos, e mix-blend-difference (a saída que a navbar e os trilhos usam)
+       não vale para scrollbar. O accent puro dá 7.1:1 no branco mas cai para
+       2.8:1 no ink. Este violeta é o ponto em que as duas medidas se encontram:
+       4.6:1 e 4.3:1. Clarear mais inverte o problema. */
+    --scroll-thumb: #8a4dff;
+    /* Cinza médio: sendo simétrico, clareia sobre o ink e escurece sobre o
+       branco na mesma proporção, e o fio some junto com a seção. */
+    --scroll-track: rgba(128, 128, 128, 0.3);
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     /* offsetParent não-estático, exigido pelo useScroll do Motion */
@@ -41,6 +54,10 @@
     -moz-osx-font-smoothing: grayscale;
     /* clip (não hidden) preserva position: sticky nos descendentes */
     overflow-x: clip;
+    /* O usePanelBackdrop escreve aqui um gradiente em coordenadas de viewport,
+       e é o fixed que ancora nelas: sem ele o fundo rolaria junto com o
+       documento e as faixas descolariam das seções na primeira rolagem. */
+    background-attachment: fixed;
   }
 
   ::selection {
@@ -51,6 +68,67 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 4px;
+  }
+
+  /* Barra de rolagem.
+     Só em ponteiro fino: no toque a barra é sobreposta e efêmera, o navegador
+     não deixa estilizar, e forçar largura ali só rouba área útil.
+
+     O desenho segue a gramática do resto: fio de 1px como trilho e um bloco
+     reto por cima, sem borda arredondada — o único raio do site é o anel do
+     cursor. A calha tem 12px para a pegada continuar confortável, mas o polegar
+     aparece com 4px: o border transparente mais o background-clip: content-box
+     separam o que se vê do que se pega. No hover ele engorda para 8px sem que a
+     calha mude de largura, então o conteúdo não reflui. */
+  @media (pointer: fine) {
+    /* Firefox não tem os pseudo-elementos e fica com esta versão: barra fina e
+       violeta, com o polegar arredondado que ele impõe.
+
+       O @supports não é detalhe de compatibilidade, é o que separa os dois
+       caminhos. O Chrome hoje implementa scrollbar-color, e quando ele está
+       declarado a barra inteira passa a ser desenhada pelo motor padrão, que
+       ignora todo o bloco ::-webkit- abaixo — voltavam a largura thin, o
+       polegar arredondado e as setas de topo e rodapé. Testar o seletor deixa
+       estas duas linhas só para quem não tem o caminho melhor. */
+    @supports not selector(::-webkit-scrollbar) {
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scroll-thumb) transparent;
+      }
+    }
+
+    /* transparente nos dois níveis, senão o WebKit pinta a calha de claro por
+       conta própria e tapa o fundo do body, que é quem faz a troca de cor */
+    ::-webkit-scrollbar {
+      width: 12px;
+      background: transparent;
+    }
+
+    /* as setas de rolagem do Windows, que é o que mais entrega a barra padrão */
+    ::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    /* fio de 1px centrado na calha, coberto pelo polegar quando ele passa */
+    ::-webkit-scrollbar-track {
+      background: linear-gradient(
+        to right,
+        transparent calc(50% - 0.5px),
+        var(--scroll-track) calc(50% - 0.5px),
+        var(--scroll-track) calc(50% + 0.5px),
+        transparent calc(50% + 0.5px)
+      );
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scroll-thumb);
+      background-clip: content-box;
+      border: 4px solid transparent;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      border-width: 2px;
+    }
   }
 }
 
