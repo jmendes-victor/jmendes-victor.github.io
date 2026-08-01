@@ -4,7 +4,7 @@ export const profile = {
   name: "Mendes",
   role: "Pesquisador",
   edition: "Portfólio 2026",
-  email: "jonh_victor@outlook.com",
+  email: "joao.mendeslira@upe.br",
   location: "Pernambuco, Brasil",
   availability: "Aberto a colaborações",
 };
