@@ -8,11 +8,27 @@
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  /* Só para os momentos de tipo gigante. Inter continua sendo a voz do site —
+     Anton em texto corrido seria ilegível, ela não tem peso variável nem
+     minúsculas confortáveis. Display face + text face, como em impresso. */
+  --font-display: "Anton", "Inter", ui-sans-serif, sans-serif;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
+  :root {
+    /* Recuo dos trilhos de margem. O gutter das seções é maior que isto de
+       propósito: o texto respira para dentro dos fios, nunca encosta neles. */
+    --rail-inset: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --rail-inset: 1rem;
+    }
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     /* offsetParent não-estático para o useScroll do Motion medir a partir dele */
@@ -41,6 +57,40 @@
 }
 
 @layer components {
+  /* Painel temático. Cada seção declara se é clara ou escura e os filhos leem
+     as variáveis — nenhum componente precisa saber sobre que fundo está.
+     Sem isto, alternar cor obrigaria a duplicar cada classe de cor em toda
+     linha de projeto, rótulo e fio do site.
+
+     Os níveis de opacidade não são simétricos entre os dois temas de propósito:
+     texto claro sobre fundo escuro parece mais apagado que o inverso na mesma
+     porcentagem, então o tema escuro precisa de mais opacidade para o mesmo
+     peso visual. */
+  .panel {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  .panel-light {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --fg-soft: rgba(10, 10, 10, 0.55);
+    --fg-mute: rgba(10, 10, 10, 0.4);
+    --fg-faint: rgba(10, 10, 10, 0.22);
+    --rule: rgba(10, 10, 10, 0.16);
+    --line: #0a0a0a;
+  }
+
+  .panel-dark {
+    --bg: #0a0a0a;
+    --fg: #ffffff;
+    --fg-soft: rgba(255, 255, 255, 0.62);
+    --fg-mute: rgba(255, 255, 255, 0.46);
+    --fg-faint: rgba(255, 255, 255, 0.28);
+    --rule: rgba(255, 255, 255, 0.18);
+    --line: #ffffff;
+  }
+
   /* Nome do hero — tratamento tipográfico do design original: Inter 700,
      tracking -0.04em, leading 0.9. O teto de 8.75rem é os 140px fixos que ele
      tinha; o clamp só entra para baixo, em tela estreita. */
@@ -69,6 +119,18 @@
     line-height: 1.02;
     letter-spacing: -0.035em;
     text-transform: uppercase;
+  }
+
+  /* O manifesto da abertura. Caixa baixa e peso 500 no meio de uma página
+     inteira de caixa alta 700 — é o único lugar onde alguém fala em vez de
+     rotular, e a mudança de voz precisa ser visível antes de ser lida.
+     Leading 1.1: em texto desse corpo, 1.4 abriria buracos entre as linhas. */
+  .type-manifesto {
+    font-family: var(--font-sans);
+    font-size: clamp(1.75rem, 4.4vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
   }
 
   /* Parágrafo de destaque */
@@ -107,6 +169,31 @@
     font-weight: 500;
     letter-spacing: 0.025em;
     text-transform: uppercase;
+  }
+
+  /* O tipo que é cortado pela viewport. Não é o hero: é o título que entra
+     grande demais de propósito, como o "MOMENTS" / "EXPLORE" da referência.
+     92px de piso e 22vw de teto — em tela larga ele encosta nas duas margens. */
+  .type-mega {
+    font-family: var(--font-display);
+    font-size: clamp(5.75rem, 22vw, 20rem);
+    font-weight: 400; /* Anton só tem um peso; 700 faria o browser engordar falso */
+    line-height: 0.82;
+    /* -0.03em é o tracking medido na referência (-23px em 769px). Anton já
+       nasce condensada, então mais que isso começa a colar as hastes. */
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  /* Rótulo dos trilhos: menor e mais espaçado que o .type-mono do corpo,
+     porque vive rotacionado e precisa ler como chancela, não como texto. */
+  .type-rail {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
   }
 
   /* Padding lateral único do site inteiro */

@@ -6,10 +6,10 @@ export default function Footer() {
 
   return (
     <footer
-      className="gutter relative z-10 bg-ink pb-8 text-paper"
+      className="panel panel-dark gutter relative z-10 pb-8"
     >
-      <div className="flex flex-col gap-6 border-t border-paper/20 pt-6 sm:flex-row sm:items-baseline sm:justify-between">
-        <span className="type-mono text-paper/40">
+      <div className="flex flex-col gap-6 border-t border-[var(--rule)] pt-6 sm:flex-row sm:items-baseline sm:justify-between">
+        <span className="type-mono text-[var(--fg-mute)]">
           © {year} {profile.name} — {profile.location}
         </span>
 

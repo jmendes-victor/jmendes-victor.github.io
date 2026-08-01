@@ -8,13 +8,34 @@ const EASE = [0.16, 1, 0.3, 1];
  * número/título/disciplina/ano, embaixo resumo e stack. É a densidade que
  * separa um índice de uma lista de links.
  *
- * Nada aqui muda de altura no hover de propósito: linha que cresce empurra as
- * de baixo, o cursor cai fora dela e o estado pisca.
+ * O hover inverte a linha: uma faixa da cor do texto varre por baixo e o
+ * conteúdo passa a ler na cor do fundo. Três decisões dentro disso:
  *
- * `dimmed` é o que dá foco: sem apagar as outras, o hover não lê.
+ * 1. A varredura *atravessa*: entra pela esquerda e sai pela direita, em vez
+ *    de voltar por onde veio. Um preenchimento que recua desfaz o gesto; um
+ *    que continua no mesmo sentido lê como algo passando por baixo da linha.
+ *    O truque é que `transform-origin` não é transicionado — ele troca na
+ *    hora. Em repouso a origem é a direita, no hover é a esquerda: entrando,
+ *    a faixa cresce a partir da esquerda; saindo, a origem já saltou para a
+ *    direita e ela encolhe para lá.
+ *
+ * 2. O texto não troca de cor: ele usa `mix-blend-difference` e se inverte
+ *    sozinho onde a faixa passou por baixo. Trocar a cor no hover não funciona
+ *    aqui — a cor muda na linha inteira de uma vez, enquanto a faixa a cobre
+ *    progressivamente, então o pedaço ainda não coberto escurece sobre o fundo
+ *    escuro e some por um instante. O blend não tem esse problema porque é
+ *    resolvido pixel a pixel: a inversão acompanha exatamente a borda da
+ *    faixa, e nenhuma duração precisa bater com nenhuma outra.
+ *
+ * 3. Nada muda de altura. Linha que cresce empurra as de baixo, o cursor cai
+ *    fora dela e o estado pisca.
+ *
+ * `dimmed` é o que dá foco: sem apagar as outras, a inversão sozinha não
+ * separa a linha apontada do resto da lista.
  */
 export default function ProjectRow({ project, index, dimmed, onEnter }) {
   const reduced = useReducedMotion();
+
   const Row = project.href ? "a" : "div";
   const linkProps = project.href
     ? { href: project.href, target: "_blank", rel: "noreferrer" }
@@ -24,16 +45,29 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
   const delay = index * 0.08;
 
   return (
-    <li className="group" onPointerEnter={onEnter}>
+    <li
+      // `isolate` cria o contexto de empilhamento: sem ele o -z-10 da faixa
+      // furaria a linha e iria parar atrás do fundo da própria seção.
+      className="group relative isolate"
+      onPointerEnter={onEnter}
+    >
+      {/* A faixa que varre por baixo de tudo. O inset negativo a faz sangrar
+          para fora do gutter e encostar nas bordas da tela — presa à coluna de
+          texto ela pareceria um botão, sangrando lê como faixa. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-[-1.5rem] inset-y-0 -z-10 origin-right scale-x-0 bg-[var(--fg)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:origin-left group-hover:scale-x-100 motion-reduce:transition-none md:inset-x-[-2.5rem]"
+      />
+
       <Row
         {...linkProps}
         data-cursor={project.href ? "link" : undefined}
-        className={`block py-7 transition-opacity duration-500 md:py-9 ${
-          dimmed ? "opacity-25" : "opacity-100"
+        className={`block py-7 mix-blend-difference transition-opacity duration-500 md:py-9 ${
+          dimmed ? "opacity-40" : "opacity-100"
         }`}
       >
         <div className="flex items-baseline gap-4 md:gap-8">
-          <span className="type-mono w-8 shrink-0 text-ink/40 transition-colors duration-300 group-hover:text-accent md:w-12">
+          <span className="type-mono w-8 shrink-0 text-[var(--fg-mute)] md:w-12">
             {number}
           </span>
 
@@ -48,11 +82,11 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
             />
           </h3>
 
-          <span className="type-mono hidden shrink-0 text-ink/50 md:block">
+          <span className="type-mono hidden shrink-0 text-[var(--fg-soft)] md:block">
             {project.discipline}
           </span>
 
-          <span className="type-mono w-12 shrink-0 text-right text-ink/50 md:w-16">
+          <span className="type-mono w-12 shrink-0 text-right text-[var(--fg-soft)] md:w-16">
             {project.year}
           </span>
         </div>
@@ -66,11 +100,11 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
           transition={{ duration: 0.8, ease: EASE, delay: delay + 0.25 }}
         >
           {/* caixa normal: é frase, não rótulo — em caixa alta vira ruído */}
-          <p className="type-mono max-w-xl normal-case tracking-normal text-ink/45 transition-colors duration-300 group-hover:text-ink/70">
+          <p className="type-mono max-w-xl normal-case tracking-normal text-[var(--fg-mute)]">
             {project.summary}
           </p>
 
-          <span className="type-mono flex shrink-0 items-center gap-3 text-ink/45 transition-colors duration-300 group-hover:text-ink/70">
+          <span className="type-mono flex shrink-0 items-center gap-3 text-[var(--fg-mute)]">
             {project.role} — {project.stack.join(" · ")}
             {project.href && (
               <span className="inline-block -translate-x-1 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100">
@@ -83,7 +117,7 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
 
       {/* o fio se desenha da esquerda quando a linha entra na tela */}
       <motion.span
-        className="block h-px w-full origin-left bg-rule transition-colors duration-500 group-hover:bg-accent"
+        className="block h-px w-full origin-left bg-[var(--rule)]"
         initial={{ scaleX: reduced ? 1 : 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true, margin: "0px 0px -15% 0px" }}
