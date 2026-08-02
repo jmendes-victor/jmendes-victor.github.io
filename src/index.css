@@ -190,6 +190,22 @@
     text-transform: uppercase;
   }
 
+  /* O título divide a linha com o número e o ano, que são largura fixa: com o
+     gutter, sobram 10rem a menos que a tela. Abaixo de ~345px "PNEUMONIA", a
+     palavra mais larga do índice, não cabe no que resta — e como o SplitText
+     marca cada palavra whitespace-nowrap, ela não tem onde quebrar e empurra o
+     ano para fora da tela.
+
+     O fator 0.173 é a razão medida entre o corpo do texto e a largura dessa
+     palavra. Como o clamp para nos mesmos 2rem do padrão assim que ela volta a
+     caber, dos 345px para cima nada muda — daí o teto da media query ser
+     folgado. */
+  @media (max-width: 400px) {
+    .type-index {
+      font-size: clamp(1.5rem, calc((100vw - 10rem) * 0.173), 2rem);
+    }
+  }
+
   /* Títulos de seção */
   .type-headline {
     font-size: clamp(1.75rem, 3.6vw, 3.25rem);
@@ -278,15 +294,27 @@
   }
 
   /* Acompanha o .type-mega nos títulos de seção. Abaixo de md a margem lateral
-     come proporcionalmente mais tela que no desktop, e a 22vw uma palavra longa
-     ("Ferramenta", "conversar") perdia as últimas letras dentro do
-     overflow-hidden — o que lê como defeito, não como corte proposital. 20vw
-     devolve a sangria para os mesmos ~8% do desktop.
+     come proporcionalmente mais tela que no desktop, e no corpo cheio uma
+     palavra longa perdia as últimas letras dentro do overflow-hidden — o que lê
+     como defeito, não como corte proposital.
+
+     Medir em vw puro não resolvia: 100vw é a tela, mas quem corta é a coluna,
+     que é menor que ela pelos dois gutters. A 20vw "FERRAMENTA" abria 350px
+     dentro de uma coluna de 330px e ficava 20px para fora em qualquer posição
+     de rolagem — o "A" final entrava pela metade e nunca saía. Daí o cálculo
+     partir da coluna e não da tela.
+
+     O fator 0.214 é 0.96 ÷ 4.49, sendo 4.49 a razão medida entre o corpo do
+     texto e a largura de "FERRAMENTA" (o título mais longo do site) na Anton.
+     Os 4% restantes são folga: o parallax do SectionHead, que era quem os
+     consumia, hoje não roda nesta faixa, então eles ficaram como margem para a
+     próxima palavra longa. O -4rem desconta os gutters (2×1.5rem) e mais 1rem
+     de margem para a barra de rolagem, que o 100vw conta como área útil e não é.
 
      Não vale para o nome do hero, que é curto e já cabe inteiro. */
   @media (max-width: 767px) {
     .type-mega-fit {
-      font-size: clamp(2.5rem, 20vw, 9.5rem);
+      font-size: clamp(2.5rem, calc((100vw - 4rem) * 0.214), 9.5rem);
     }
   }
 

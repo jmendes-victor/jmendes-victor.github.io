@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import SplitText from "./SplitText";
 
@@ -6,6 +6,22 @@ import SplitText from "./SplitText";
 export default function SectionHead({ label, title, meta }) {
   const reduced = useReducedMotion();
   const ref = useRef(null);
+  const [wide, setWide] = useState(false);
+
+  // O parallax é só de md para cima. Abaixo disso o .type-mega-fit dimensiona o
+  // título para caber justo na coluna, e aí qualquer deslocamento horizontal
+  // passa a raspar letra na borda: como o texto é alinhado à esquerda, no
+  // extremo negativo é a primeira que entra embaixo do overflow-hidden, e não
+  // existe corpo de fonte que resolva isso. Na tela larga o corte é proposital
+  // — é o que o .type-mega descreve — e o efeito fica de pé.
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const sync = () => setWide(desktop.matches);
+
+    sync();
+    desktop.addEventListener("change", sync);
+    return () => desktop.removeEventListener("change", sync);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -28,7 +44,7 @@ export default function SectionHead({ label, title, meta }) {
       <div className="mt-8 overflow-hidden md:mt-10">
         <motion.h3
           className="type-mega type-mega-fit text-[var(--fg)]"
-          style={reduced ? undefined : { x }}
+          style={reduced || !wide ? undefined : { x }}
         >
           <SplitText text={title} inView justify="start" stagger={0.035} duration={1.1} />
         </motion.h3>

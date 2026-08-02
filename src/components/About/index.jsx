@@ -27,13 +27,17 @@ export default function About() {
               key={`${item.company}-${i}`}
               as="li"
               delay={i * 0.06}
-              className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 border-t border-[var(--rule)] py-6 transition-colors duration-500 hover:border-[var(--line)] md:gap-8 md:py-8"
+              className="group grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-3 border-t border-[var(--rule)] py-6 transition-colors duration-500 hover:border-[var(--line)] md:grid-cols-[auto_1fr_auto] md:gap-8 md:py-8"
             >
               <span className="type-mono shrink-0 text-[var(--fg-mute)] transition-colors duration-300 group-hover:text-accent">
                 {item.period}
               </span>
 
-              <div className="min-w-0">
+              {/* Abaixo de md o título desce para uma linha só sua. Espremido
+                  entre o período e o "+" ele ficava com ~200px para um corpo de
+                  28px, e "Mestrado em Engenharia da Computação" quebrava em
+                  quatro linhas soltas ("da" sozinha em uma delas). */}
+              <div className="col-span-2 row-start-2 min-w-0 md:col-span-1 md:col-start-2 md:row-start-1">
                 <h4 className="type-headline transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2 motion-reduce:transition-none">
                   {item.role}
                 </h4>
@@ -46,7 +50,7 @@ export default function About() {
               <svg
                 aria-hidden="true"
                 viewBox="0 0 12 12"
-                className="size-3 shrink-0 fill-[var(--fg-faint)] transition-all duration-500 group-hover:rotate-90 group-hover:fill-[var(--fg)] motion-reduce:transition-none"
+                className="col-start-2 row-start-1 size-3 shrink-0 fill-[var(--fg-faint)] transition-all duration-500 group-hover:rotate-90 group-hover:fill-[var(--fg)] motion-reduce:transition-none md:col-start-3"
               >
                 <path d="M5.2 0h1.6v12H5.2z" />
                 <path d="M0 5.2h12v1.6H0z" />

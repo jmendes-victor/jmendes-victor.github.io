@@ -9,11 +9,19 @@ export default function Intro() {
       id="intro"
       className="panel panel-light gutter relative z-10 mt-[100vh] border-t border-[var(--line)] pb-32 pt-6 md:pb-48"
     >
-      <dl className="grid grid-cols-3 gap-4 border-b border-[var(--rule)] pb-6">
+      {/* Três colunas só a partir de sm: abaixo disso elas ficam com ~90px e
+          "IA aplicada à saúde" quebra em duas ou três linhas, cada coluna
+          terminando numa altura diferente. Empilhado, o rótulo vai para a
+          esquerda e o valor para a direita — o mesmo par que fecha esta seção
+          logo abaixo ("Abertura / 01 · 05") e que o Contato usa no topo. */}
+      <dl className="grid gap-3 border-b border-[var(--rule)] pb-6 sm:grid-cols-3 sm:gap-4">
         {facts.map((fact) => (
-          <div key={fact.label} className="flex flex-col gap-1">
+          <div
+            key={fact.label}
+            className="flex items-baseline justify-between gap-4 sm:flex-col sm:items-start sm:gap-1"
+          >
             <dt className="type-mono text-[var(--fg-mute)]">{fact.label}</dt>
-            <dd className="type-mono">{fact.value}</dd>
+            <dd className="type-mono text-right sm:text-left">{fact.value}</dd>
           </div>
         ))}
       </dl>

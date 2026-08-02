@@ -51,7 +51,11 @@ export default function ProjectRow({ project, index, dimmed, onEnter }) {
             {number}
           </span>
 
-          <h3 className="type-index flex-1 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+          {/* min-w-0 porque o padrão do flex é não encolher abaixo do conteúdo
+              mínimo, e aqui esse mínimo é a palavra mais larga do título: sem
+              ele a coluna do ano era empurrada para fora da tela em vez de o
+              título quebrar. O corpo em si quem trata é o .type-index. */}
+          <h3 className="type-index min-w-0 flex-1 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
             <SplitText
               text={project.title}
               inView
