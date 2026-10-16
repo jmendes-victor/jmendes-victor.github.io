@@ -1,31 +1,14 @@
-import { useEffect, useState } from "react";
-import ProjectRow from "./ProjectRow";
 import SectionHead from "../ui/SectionHead";
 import RollText from "../ui/RollText";
+import Case from "./Case";
+import Archive from "./Archive";
 import { projects, socials } from "../../data/site";
 
+// Pesquisa primeiro, em cases com esquema; os sistemas de cliente depois, numa
+// tabela. A divisão vem do featured em data/site.js.
 export default function Work() {
-  const [active, setActive] = useState(null);
-  const [canHover, setCanHover] = useState(false);
-
-  useEffect(() => {
-    const fine = window.matchMedia("(pointer: fine)");
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setCanHover(fine.matches && !reduced.matches);
-
-    sync();
-    fine.addEventListener("change", sync);
-    reduced.addEventListener("change", sync);
-    return () => {
-      fine.removeEventListener("change", sync);
-      reduced.removeEventListener("change", sync);
-    };
-  }, []);
-
-  const handleEnter = (index) => () => {
-    if (!canHover) return;
-    setActive(index);
-  };
+  const featured = projects.filter((project) => project.featured);
+  const archive = projects.filter((project) => !project.featured);
 
   const github = socials.find((item) => item.label === "GitHub");
   const firstYear = projects.at(-1)?.year;
@@ -42,17 +25,13 @@ export default function Work() {
         meta={`${firstYear}-${lastYear} · (${String(projects.length).padStart(2, "0")})`}
       />
 
-      <ul className="mt-16 md:mt-24" onPointerLeave={() => setActive(null)}>
-        {projects.map((project, i) => (
-          <ProjectRow
-            key={project.slug}
-            project={project}
-            index={i}
-            dimmed={active !== null && active !== i}
-            onEnter={handleEnter(i)}
-          />
+      <div className="mt-16 flex flex-col gap-28 md:mt-24 md:gap-40">
+        {featured.map((project, i) => (
+          <Case key={project.slug} project={project} index={i} />
         ))}
-      </ul>
+      </div>
+
+      <Archive items={archive} />
 
       {github && (
         <a
@@ -65,7 +44,7 @@ export default function Work() {
           <span className="type-mono text-[var(--fg-mute)] transition-colors duration-300 group-hover:text-[var(--fg)]">
             O que é público está nos repositórios
           </span>
-          <span className="type-mono flex shrink-0 items-center gap-2 transition-colors duration-300 group-hover:text-accent">
+          <span className="type-mono flex shrink-0 items-center gap-2 transition-colors duration-300 group-hover:text-accent-soft">
             <RollText>GitHub</RollText>
             <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 motion-reduce:transition-none">
               ↗

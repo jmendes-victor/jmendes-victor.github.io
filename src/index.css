@@ -4,6 +4,9 @@
   --color-paper: #ffffff;
   --color-ink: #0a0a0a;
   --color-accent: #6300ff;
+  /* O accent sobre o ink dá 2.8:1 e some nos traços finos das figuras. Este é
+     o mesmo violeta do --scroll-thumb, que segura os dois fundos. */
+  --color-accent-soft: #8a4dff;
   --color-rule: rgba(10, 10, 10, 0.16);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -181,8 +184,11 @@
     text-transform: uppercase;
   }
 
-  /* Títulos das linhas do índice de projetos. */
-  .type-index {
+  /* Título dos cases de pesquisa. No lg ele divide a linha com a figura e fica
+     com 5 das 12 colunas: "PNEUMONIA", a palavra mais larga, mede ~5.8× o
+     corpo, e o 5.6vw a mantém dentro da coluna de 1024px para cima. Abaixo do
+     lg o case empilha e o título tem a largura toda. */
+  .type-case {
     font-size: clamp(2rem, 5.6vw, 5rem);
     font-weight: 700;
     line-height: 0.95;
@@ -190,20 +196,29 @@
     text-transform: uppercase;
   }
 
-  /* O título divide a linha com o número e o ano, que são largura fixa: com o
-     gutter, sobram 10rem a menos que a tela. Abaixo de ~345px "PNEUMONIA", a
-     palavra mais larga do índice, não cabe no que resta — e como o SplitText
-     marca cada palavra whitespace-nowrap, ela não tem onde quebrar e empurra o
-     ano para fora da tela.
+  /* Rótulos dentro das figuras. Menor que o .type-mono porque divide a largura
+     da figura em quatro colunas: a 320px cada uma fica com ~60px, e
+     "CONVOLUÇÃO" precisa caber sem quebrar. */
+  .type-fig {
+    font-family: var(--font-mono);
+    font-size: clamp(0.5625rem, 0.45rem + 0.35vw, 0.75rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
 
-     O fator 0.173 é a razão medida entre o corpo do texto e a largura dessa
-     palavra. Como o clamp para nos mesmos 2rem do padrão assim que ela volta a
-     caber, dos 345px para cima nada muda — daí o teto da media query ser
-     folgado. */
-  @media (max-width: 400px) {
-    .type-index {
-      font-size: clamp(1.5rem, calc((100vw - 10rem) * 0.173), 2rem);
-    }
+  /* Papel milimetrado das figuras. 8% do --fg: o bastante para ler como grade,
+     pouco para competir com o desenho por cima. */
+  .figure-grid {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--fg) 8%, transparent) 1px,
+      transparent 1.5px
+    );
+    background-size: 20px 20px;
+    background-position: center;
   }
 
   /* Títulos de seção */
@@ -215,14 +230,31 @@
     text-transform: uppercase;
   }
 
-  /* Parágrafo de abertura. Caixa baixa e peso 500, único no site, que é todo
-     caixa alta 700. Leading 1.1 porque nesse corpo o padrão abre buracos. */
-  .type-manifesto {
-    font-family: var(--font-sans);
-    font-size: clamp(1.75rem, 4.4vw, 4rem);
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+  /* Letreiro da abertura. Mesma Anton do nome do hero, num corpo que deixa a
+     linha mais longa com ~3/4 da coluna: o quarto que sobra é o que dá o
+     zigue-zague entre as linhas alinhadas à esquerda e à direita. */
+  .type-opening {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 11vw, 15rem);
+    font-weight: 400;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  /* No telefone o zigue-zague cede: no 11vw o letreiro ficava miúdo, com um
+     quarto da tela sobrando. Aqui a linha mais longa ("APLICADA À SAÚDE",
+     6.5× o corpo) vai a ~91% da coluna; o -3rem desconta os dois gutters. */
+  @media (max-width: 639px) {
+    .type-opening {
+      font-size: calc((100vw - 3rem) * 0.14);
+    }
+  }
+
+  /* Só o contorno. O max() segura 1px no telefone, onde 0.012em some. */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: max(1px, 0.012em) var(--fg);
   }
 
   /* Acompanha o .type-headline no e-mail do contato.

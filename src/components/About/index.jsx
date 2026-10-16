@@ -13,7 +13,7 @@ export default function About() {
       <div className="mt-16 grid gap-8 md:mt-24 md:grid-cols-12 md:gap-10">
         <span className="type-mono text-[var(--fg-mute)] md:col-span-3">Abordagem</span>
         <Reveal className="md:col-span-9 lg:col-span-7">
-          <p className="type-statement text-pretty">{statement[1]}</p>
+          <p className="type-statement text-pretty">{statement}</p>
         </Reveal>
       </div>
 

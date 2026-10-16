@@ -1,50 +1,103 @@
-import ScrollReveal from "../ui/ScrollReveal";
-import { facts, statement, profile } from "../../data/site";
+import { useEffect, useState } from "react";
+import Banner from "./Banner";
+import Reveal from "../ui/Reveal";
+import RollText from "../ui/RollText";
+import { scrollTo } from "../../hooks/useLenis";
+import { facts, opening, profile } from "../../data/site";
 
-// Primeira seção depois do hero. O margin-top: 100vh é o que reserva a rolagem
-// do hero (que é fixed) — mexer nele quebra a entrada da página.
+const clock = new Intl.DateTimeFormat("pt-BR", {
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "America/Recife",
+});
+
+// Primeira seção depois do hero: o letreiro e, embaixo, apresentação, ficha
+// técnica e o atalho para o trabalho. O margin-top: 100vh é o que reserva a
+// rolagem do hero (que é fixed) — mexer nele quebra a entrada da página.
 export default function Intro() {
+  const handleClick = (event) => {
+    event.preventDefault();
+    scrollTo("#projetos");
+    history.replaceState(null, "", "#projetos");
+  };
+
+  const details = [
+    ...facts,
+    {
+      label: "Status",
+      value: (
+        <span className="inline-flex items-center gap-2">
+          <span aria-hidden="true" className="relative flex size-1.5">
+            <span className="absolute inset-0 animate-ping bg-accent opacity-60" />
+            <span className="relative size-1.5 bg-accent" />
+          </span>
+          {profile.availability}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <section
       id="intro"
-      className="panel panel-light gutter relative z-10 mt-[100vh] border-t border-[var(--line)] pb-32 pt-6 md:pb-48"
+      className="panel panel-light gutter relative z-10 mt-[100vh] border-t border-[var(--line)] pb-24 pt-6 md:pb-32"
     >
-      {/* Três colunas só a partir de sm: abaixo disso elas ficam com ~90px e
-          "IA aplicada à saúde" quebra em duas ou três linhas, cada coluna
-          terminando numa altura diferente. Empilhado, o rótulo vai para a
-          esquerda e o valor para a direita — o mesmo par que fecha esta seção
-          logo abaixo ("Abertura / 01 · 05") e que o Contato usa no topo. */}
-      <dl className="grid gap-3 border-b border-[var(--rule)] pb-6 sm:grid-cols-3 sm:gap-4">
-        {facts.map((fact) => (
-          <div
-            key={fact.label}
-            className="flex items-baseline justify-between gap-4 sm:flex-col sm:items-start sm:gap-1"
-          >
-            <dt className="type-mono text-[var(--fg-mute)]">{fact.label}</dt>
-            <dd className="type-mono text-right sm:text-left">{fact.value}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className="mt-28 grid gap-6 md:mt-44 md:grid-cols-12 md:gap-10">
-        <span className="type-mono text-[var(--fg-mute)] md:col-span-3">
-          {profile.edition}
+      <div className="flex items-baseline justify-between gap-6">
+        <h2 className="type-mono">Abertura</h2>
+        <span className="type-mono text-right text-[var(--fg-soft)]">
+          {profile.location} · <LocalTime />
         </span>
-
-        <div className="md:col-span-9">
-          {/* ~20ch: nesse corpo de texto, linha cheia fica difícil de acompanhar */}
-          <ScrollReveal
-            text={statement[0]}
-            className="type-manifesto max-w-[20ch] text-balance"
-          />
-        </div>
       </div>
 
-      {/* mesmo par rótulo/número dos trilhos, aqui deitado, fechando a seção */}
-      <div className="mt-28 flex items-baseline justify-between border-t border-[var(--rule)] pt-4 md:mt-44">
-        <span className="type-mono text-[var(--fg-mute)]">Abertura</span>
-        <span className="type-mono text-[var(--fg-mute)]">01 · 05</span>
+      <Banner lines={opening.lines} className="mt-20 md:mt-32" />
+
+      {/* No lg: apresentação e atalho à esquerda, ficha à direita ocupando as
+          duas linhas. A ordem do DOM (texto, ficha, atalho) é a do telefone. */}
+      <div className="mt-16 grid gap-y-12 border-t border-[var(--rule)] pt-8 md:mt-24 lg:grid-cols-12 lg:gap-x-10 lg:pt-10">
+        <Reveal className="lg:col-span-6 lg:row-start-1">
+          <p className="type-statement max-w-[36ch] text-pretty">{opening.lede}</p>
+        </Reveal>
+
+        <Reveal delay={0.1} className="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1">
+          <dl>
+            {details.map((item) => (
+              <div
+                key={item.label}
+                className="flex items-baseline justify-between gap-6 border-b border-[var(--rule)] py-3"
+              >
+                <dt className="type-mono text-[var(--fg-mute)]">{item.label}</dt>
+                <dd className="type-mono text-right">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        <Reveal delay={0.2} className="lg:col-span-6 lg:row-start-2 lg:self-end">
+          <a href="#projetos" onClick={handleClick} data-cursor="link" className="group inline-block">
+            <span className="type-mono flex items-center gap-3 transition-colors duration-300 group-hover:text-accent">
+              <RollText>Ver trabalho</RollText>
+              <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0.5 motion-reduce:transition-none">
+                ↓
+              </span>
+            </span>
+            {/* mesmo fio dos links dos cases: recolhe no hover */}
+            <span className="mt-2 block h-px w-full origin-left bg-[var(--line)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-0 motion-reduce:transition-none" />
+          </a>
+        </Reveal>
       </div>
     </section>
   );
+}
+
+// Hora de Pernambuco, não a de quem visita. A cada 15 s basta para virar o
+// minuto a tempo sem acordar a página à toa.
+function LocalTime() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 15000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <time dateTime={now.toISOString()}>{clock.format(now)}</time>;
 }

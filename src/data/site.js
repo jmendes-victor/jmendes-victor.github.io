@@ -28,6 +28,11 @@ export const facts = [
 
 // href é null nos sistemas internos de cliente, que não têm link público.
 //
+// featured separa a pesquisa (vira case com esquema) dos sistemas de cliente
+// (vão para a tabela). Nos featured, figure.stages são as quatro colunas do
+// esquema, na ordem em que o desenho as posiciona — o desenho em si fica em
+// Work/diagrams.jsx, indexado pelo slug.
+//
 // TODO: revisar a stack dos sistemas de gestão quando chegar a pasta freelancer
 // (o currículo cita JS, TS e PHP na Tábula, mas não diz o que foi usado em cada).
 // TODO: image está null em todos — falta um print por projeto.
@@ -43,6 +48,17 @@ export const projects = [
     stack: ["Python", "LangGraph", "Owlready2", "Flask"],
     href: "https://github.com/jmendes-victor/MORA",
     image: null,
+    featured: true,
+    cta: "Ver repositório",
+    figure: {
+      caption: "Os agentes traduzem a pergunta em consulta à ontologia, e é dela que sai a resposta.",
+      stages: [
+        { label: "Pergunta", note: "Português" },
+        { label: "Agentes", note: "LangGraph" },
+        { label: "Ontologia", note: "OWL" },
+        { label: "Resposta", note: "Base formal" },
+      ],
+    },
   },
   {
     slug: "pneumonia-cnn",
@@ -55,6 +71,17 @@ export const projects = [
     stack: ["Python", "PyTorch", "TensorFlow"],
     href: "https://doi.org/10.54033/cadpedv22n5-258",
     image: null,
+    featured: true,
+    cta: "Ler o artigo",
+    figure: {
+      caption: "A rede extrai atributos da radiografia e classifica o exame entre normal e pneumonia.",
+      stages: [
+        { label: "Raio-X", note: "Tórax" },
+        { label: "Convolução", note: "Filtros" },
+        { label: "Atributos", note: "Vetor" },
+        { label: "Classe", note: "Binária" },
+      ],
+    },
   },
   {
     slug: "erp-textil",
@@ -106,11 +133,22 @@ export const projects = [
   },
 ];
 
-// [0] abre a página (Intro), [1] é o texto da seção Sobre.
-export const statement = [
-  "Faço pesquisa em aprendizado de máquina aplicado à saúde. Antes disso passei dois anos escrevendo sistemas que precisavam funcionar todo dia.",
-  "No mestrado trabalho com representação de conhecimento e sistemas multiagente aplicados à vigilância de tuberculose. O que me prende no assunto é a garantia: o profissional pergunta em português e a resposta tem que vir de uma base formal, não de um chute bem escrito do modelo. Antes da pesquisa passei dois anos entregando sistemas de gestão para clientes reais, o que me deixou impaciente com protótipo que só roda no notebook do autor.",
-];
+// Abertura. Uma entrada por linha do letreiro; os lados alternam sozinhos.
+// `outline` desenha só o contorno — o "antes", em contraste com o "hoje"
+// cheio — e `note` é a anotação miúda ao lado da linha.
+export const opening = {
+  lines: [
+    { text: "Pesquisa em IA", note: "(01) Hoje" },
+    { text: "aplicada à saúde" },
+    { text: "Sistemas que", note: "(02) Antes", outline: true },
+    { text: "rodam todo dia", outline: true },
+  ],
+  lede: "Sou João Mendes, mestrando em Engenharia da Computação na Universidade de Pernambuco. Pesquiso aprendizado de máquina aplicado à saúde, depois de dois anos colocando sistemas de gestão em produção.",
+};
+
+// Texto da seção Sobre.
+export const statement =
+  "No mestrado trabalho com representação de conhecimento e sistemas multiagente aplicados à vigilância de tuberculose. O que me prende no assunto é a garantia: o profissional pergunta em português e a resposta tem que vir de uma base formal, não de um chute bem escrito do modelo. Antes da pesquisa passei dois anos entregando sistemas de gestão para clientes reais, o que me deixou impaciente com protótipo que só roda no notebook do autor.";
 
 export const experience = [
   {
